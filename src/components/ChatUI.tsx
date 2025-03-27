@@ -1,5 +1,6 @@
+
 import React, { useState, useRef, useEffect } from "react";
-import { Send } from "lucide-react";
+import { Send, Brain, Lightbulb, Zap, Skull } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ChatMessage } from "./ChatMessage";
@@ -89,10 +90,25 @@ const ChatUI: React.FC = () => {
     }
   };
 
+  // Pick a random icon for the header
+  const randomIcon = () => {
+    const icons = [
+      <Brain size={20} key="brain" />,
+      <Lightbulb size={20} key="lightbulb" />,
+      <Zap size={20} key="zap" />,
+      <Skull size={20} key="skull" />
+    ];
+    return icons[Math.floor(Math.random() * icons.length)];
+  };
+
   return (
     <div className="flex flex-col h-full max-w-4xl mx-auto bg-card rounded-md overflow-hidden border">
-      <div className="p-4 bg-primary text-primary-foreground">
-        <h2 className="text-xl font-semibold">College Assistant</h2>
+      <div className="p-4 bg-primary text-primary-foreground flex items-center justify-between">
+        <h2 className="text-xl font-semibold flex items-center gap-2">
+          {randomIcon()}
+          ASK DSU
+        </h2>
+        <div className="text-xs opacity-70">Where sarcasm meets knowledge</div>
       </div>
       
       <div className="flex-grow overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-200px)]">
@@ -129,7 +145,8 @@ const ChatUI: React.FC = () => {
           <Button 
             type="submit" 
             disabled={!input.trim() || isTyping}
-            className="bg-primary hover:bg-primary/90 transition-all"
+            className="bg-primary hover:bg-primary/90 transition-all flex items-center gap-1"
+            aria-label="Send message"
           >
             <Send size={18} />
           </Button>
