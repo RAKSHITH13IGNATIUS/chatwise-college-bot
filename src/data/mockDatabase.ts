@@ -250,7 +250,7 @@ function calculateSimilarity(s1: string, s2: string): number {
     if (index > -1) {
       matches++;
       // Remove the matched character to prevent double-counting
-      s2Copy.splice(index, 1);
+      s2Copy.slice(index, 1);
     }
   }
   
