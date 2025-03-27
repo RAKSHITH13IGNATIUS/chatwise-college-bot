@@ -14,8 +14,8 @@ const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-b from-background to-accent/30">
-      <header className="p-4 flex justify-between items-center border-b bg-card">
+    <div className="flex flex-col h-screen bg-background">
+      <header className="p-4 flex justify-between items-center border-b">
         <h1 className="text-xl font-semibold">College Assistant</h1>
         <Button variant="outline" onClick={handleLogout}>
           Logout

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -91,19 +90,18 @@ const ChatUI: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto bg-card rounded-xl overflow-hidden chat-box-shadow">
+    <div className="flex flex-col h-full max-w-4xl mx-auto bg-card rounded-md overflow-hidden border">
       <div className="p-4 bg-primary text-primary-foreground">
         <h2 className="text-xl font-semibold">College Assistant</h2>
-        <p className="text-sm opacity-90">Find teachers and free classrooms (with a side of sarcasm)</p>
       </div>
       
-      <div className="flex-grow overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-200px)] bg-accent/30">
+      <div className="flex-grow overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-200px)]">
         {messages.map((message) => (
           <ChatMessage key={message.id} message={message} />
         ))}
         
         {isTyping && (
-          <div className="flex items-start max-w-[80%] rounded-lg p-3 animate-pulse-subtle bg-chat-bot text-card-foreground">
+          <div className="flex items-start max-w-[80%] rounded-md p-3 animate-pulse-subtle bg-chat-bot text-card-foreground">
             <div className="typing-indicator">
               <span></span>
               <span></span>
@@ -125,7 +123,7 @@ const ChatUI: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about teachers or free classrooms..."
-            className="flex-grow p-2 rounded-md border border-border focus:outline-none focus:ring-1 focus:ring-primary"
+            className="flex-grow p-2 rounded-md border focus:outline-none focus:ring-1 focus:ring-primary"
           />
           
           <Button 

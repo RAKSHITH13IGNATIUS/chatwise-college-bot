@@ -27,10 +27,10 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     >
       <div
         className={cn(
-          "rounded-lg p-3 max-w-[80%] shadow-sm",
+          "rounded-md p-3 max-w-[80%] border",
           isBot 
-            ? "bg-chat-bot text-card-foreground" 
-            : "bg-chat-user text-card-foreground"
+            ? "bg-chat-bot text-primary-foreground" 
+            : "bg-chat-user text-foreground"
         )}
       >
         <div className="text-sm">{formattedText}</div>
