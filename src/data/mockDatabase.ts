@@ -28,69 +28,78 @@ export interface Schedule {
 
 // Mock teacher data
 export const teachers: Teacher[] = [
+   // Mock teacher data
   {
     id: "t1",
-    name: "Dr. Sarah Johnson",
-    email: "sjohnson@college.edu",
-    cabin: "A-101",
-    floor: 1,
-    department: "Computer Science"
+    name: "Dr. M Shahina Parveen",
+    email: "shahinaparveenm-cse@dsu.edu.in",
+    cabin: "A-342",
+    floor: 3,
+    department: "Computer Science Technology"
   },
   {
     id: "t2",
-    name: "Prof. Michael Chen",
-    email: "mchen@college.edu",
-    cabin: "B-205",
-    floor: 2,
-    department: "Electrical Engineering"
+    name: "Ramandeep Kaur",
+    email: "Ramandeep-ct@dsu.edu.in",
+    cabin: "A-342",
+    floor: 3,
+    department: "Computer Science Technology"
   },
   {
     id: "t3",
-    name: "Dr. Emily Rodriguez",
-    email: "erodriguez@college.edu",
-    cabin: "C-310",
+    name: "Dr. Santhosh Kumar J",
+    email: "santoshkumar-ct@dsu.edu.in",
+    cabin: "A-342",
     floor: 3,
-    department: "Mechanical Engineering"
+    department: "Computer Science Technology"
   },
   {
     id: "t4",
-    name: "Prof. David Smith",
-    email: "dsmith@college.edu",
-    cabin: "A-105",
-    floor: 1,
-    department: "Mathematics"
+    name: "Dr. Sudha D",
+    email: "sudha-ct@dsu.edu.in",
+    cabin: "A-342",
+    floor: 3,
+    department: "Computer Science Technology"
   },
   {
     id: "t5",
-    name: "Dr. Jennifer Lee",
-    email: "jlee@college.edu",
-    cabin: "B-210",
-    floor: 2,
-    department: "Physics"
+    name: "Chithambarathanu M",
+    email: "Chithambaramthanu-ct@dsu.edu.in",
+    cabin: "A-342",
+    floor: 3,
+    department: "Computer Science Technology"
   },
   {
     id: "t6",
-    name: "Prof. James Wilson",
-    email: "jwilson@college.edu",
-    cabin: "C-315",
+    name: "Nivetha NRP",
+    email: "nivetha-ct@dsu.edu.in",
+    cabin: "A-342",
     floor: 3,
-    department: "Civil Engineering"
+    department: "Computer Science Technology"
   },
   {
     id: "t7",
-    name: "Dr. Robert Brown",
-    email: "rbrown@college.edu",
-    cabin: "A-110",
-    floor: 1,
-    department: "Chemistry"
+    name: "Yashaswini B V",
+    email: "yashaswini-ct@dsu.edu.in",
+    cabin: "A-342",
+    floor: 3,
+    department: "Computer Science Technology"
   },
   {
     id: "t8",
-    name: "Prof. Maria Garcia",
-    email: "mgarcia@college.edu",
-    cabin: "B-215",
-    floor: 2,
-    department: "Computer Science"
+    name: "Vinayaka V M",
+    email: "vinayaka-ct@dsu.edu.in",
+    cabin: "A-342",
+    floor: 3,
+    department: "Computer Science Technology"
+  },
+  {
+    id: "t9",
+    name: "Junaid Mundichipparakkal",
+    email: "mpjunaid1996@gmail.com",
+    cabin: "A-342",
+    floor: 3,
+    department: "Computer Science Technology"
   }
 ];
 
