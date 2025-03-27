@@ -2,7 +2,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Message } from "./ChatUI";
-import { User, Robot, Brain, Coffee } from "lucide-react";
+import { User, Bot, Brain, Coffee } from "lucide-react";
 
 interface ChatMessageProps {
   message: Message;
@@ -21,7 +21,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
 
   // Random bot icon
   const getBotIcon = () => {
-    const icons = [<Robot size={16} />, <Brain size={16} />, <Coffee size={16} />];
+    const icons = [<Bot size={16} />, <Brain size={16} />, <Coffee size={16} />];
     return icons[Math.floor(Math.random() * icons.length)];
   };
 
