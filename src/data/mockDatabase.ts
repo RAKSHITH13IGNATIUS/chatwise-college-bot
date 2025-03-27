@@ -179,64 +179,84 @@ export const getFreeClassrooms = (day: number, time: string): Classroom[] => {
   return classrooms.filter(classroom => isClassroomFree(classroom.id, day, time));
 };
 
-// Helper function to find a teacher by name (with fuzzy matching)
+// Improved teacher name matching with better accuracy
 export const findTeacherByName = (name: string): Teacher | null => {
+  if (!name || name.trim().length < 3) {
+    return null; // Input is too short to be a valid teacher name
+  }
+  
   const normalizedSearch = name.toLowerCase().trim();
   
-  // Try exact match first
+  // 1. Try exact match first
   const exactMatch = teachers.find(
     teacher => teacher.name.toLowerCase() === normalizedSearch
   );
   if (exactMatch) return exactMatch;
   
-  // Try partial match
+  // 2. Try partial match with full name
   const partialMatch = teachers.find(
     teacher => teacher.name.toLowerCase().includes(normalizedSearch)
   );
   if (partialMatch) return partialMatch;
   
-  // Try matching on last name
-  const lastNameMatch = teachers.find(
-    teacher => {
-      const parts = teacher.name.split(' ');
-      const lastName = parts[parts.length - 1].toLowerCase();
-      return lastName === normalizedSearch || lastName.includes(normalizedSearch);
-    }
-  );
-  if (lastNameMatch) return lastNameMatch;
-  
-  // Try matching on first name
-  const firstNameMatch = teachers.find(
-    teacher => {
-      const firstName = teacher.name.split(' ')[0].toLowerCase();
-      return firstName === normalizedSearch || firstName.includes(normalizedSearch);
-    }
-  );
-  if (firstNameMatch) return firstNameMatch;
-  
-  // Try partial name (handle spelling mistakes by checking if the search term is at least
-  // contained within the full name with some leniency)
-  if (normalizedSearch.length > 3) {
-    for (const teacher of teachers) {
-      // Count matching characters
-      let matchCount = 0;
-      const teacherName = teacher.name.toLowerCase();
-      
-      for (let i = 0; i < normalizedSearch.length; i++) {
-        if (teacherName.includes(normalizedSearch[i])) {
-          matchCount++;
-        }
-      }
-      
-      // If more than 70% of characters match, consider it a match
-      if (matchCount / normalizedSearch.length > 0.7) {
-        return teacher;
-      }
+  // 3. Check for matches on individual name parts
+  for (const teacher of teachers) {
+    const nameParts = teacher.name.toLowerCase().split(/\s+/);
+    const searchParts = normalizedSearch.split(/\s+/);
+    
+    // Match any individual words in the name
+    if (searchParts.some(part => 
+      nameParts.some(namePart => 
+        namePart.includes(part) && part.length >= 3
+      )
+    )) {
+      return teacher;
     }
   }
   
-  return null;
+  // 4. Advanced fuzzy matching - calculate similarity score
+  let bestMatch: Teacher | null = null;
+  let bestScore = 0;
+  
+  for (const teacher of teachers) {
+    const teacherName = teacher.name.toLowerCase();
+    const score = calculateSimilarity(normalizedSearch, teacherName);
+    
+    if (score > bestScore && score > 0.4) { // Minimum 40% similarity threshold
+      bestScore = score;
+      bestMatch = teacher;
+    }
+  }
+  
+  return bestMatch;
 };
+
+// Helper function to calculate string similarity (0-1 score)
+function calculateSimilarity(s1: string, s2: string): number {
+  // If the strings are identical
+  if (s1 === s2) return 1.0;
+  
+  // If either string contains the other completely
+  if (s1.includes(s2)) return 0.9;
+  if (s2.includes(s1)) return 0.9;
+  
+  // Count matching characters
+  let matches = 0;
+  const s1Chars = s1.split('');
+  const s2Copy = s2.slice();
+  
+  for (const char of s1Chars) {
+    const index = s2Copy.indexOf(char);
+    if (index > -1) {
+      matches++;
+      // Remove the matched character to prevent double-counting
+      s2Copy.splice(index, 1);
+    }
+  }
+  
+  // Calculate similarity score based on matching characters relative to average length
+  return (2.0 * matches) / (s1.length + s2.length);
+}
 
 // List of engineering jokes and taunts
 export const engineeringJokes = [

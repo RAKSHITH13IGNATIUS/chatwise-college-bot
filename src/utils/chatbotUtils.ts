@@ -46,19 +46,7 @@ const isTeacherQuery = (text: string): boolean => {
     'where can i find'
   ];
   
-  for (const pattern of teacherPatterns) {
-    if (lowerText.includes(pattern)) {
-      return true;
-    }
-  }
-  
-  // Check if the query is short and might just be a name
-  const words = lowerText.split(' ');
-  if (words.length <= 3) {
-    return true; // Assume it might be a teacher's name if it's short
-  }
-  
-  return false;
+  return teacherPatterns.some(pattern => lowerText.includes(pattern));
 };
 
 // Extract a potential teacher name from a query
@@ -163,14 +151,14 @@ const formatTeacherResponse = (teacher: any): string => {
   return response;
 };
 
-// Generate a response for unrecognized queries
+// Enhanced sarcastic responses for unknown queries
 const generateGenericResponse = (query: string): string => {
   const responses = [
-    "I'm a college chatbot, not a mind reader. Try asking about teachers or free classrooms instead of... whatever that was.",
-    "Let me simplify this for you: I help find teachers and free classrooms. That's it. That's my purpose. Nothing more.",
+    "I'm an AI, not a mind reader. Try asking about teachers or free classrooms instead of... whatever that was.",
+    "Let me simplify this for you: I help find teachers and free classrooms. That's it. That's my purpose. You're forcing me to say something snarky now.",
     "Are you always this confusing, or is today special? Try asking something I actually know about, like teacher locations or available classrooms.",
     "I'd help you with that, but my programming is limited to things that actually matter - like finding teachers and free rooms. Crazy, right?",
-    "Listen, I only do two things well: find teachers and find empty classrooms. Your question fits neither category.",
+    "Listen, I only do two things well: find teachers and find empty classrooms. Your question fits neither category. Try again, but better this time.",
     "That's beyond my programming. And honestly, probably beyond your comprehension too. Stick to asking about teachers or free classrooms.",
     "I'm going to pretend you asked something relevant, like 'Where can I find a teacher?' or 'Are there any free classrooms?'",
     "Did you accidentally mix up your words, or do you genuinely think I can help with that? Try asking about teachers or available rooms.",
@@ -230,5 +218,5 @@ export const getWelcomeMessage = (): string => {
   }
   
   // Default welcome if none stored
-  return "Welcome to the College Chatbot. I'm here to help you find teachers and empty classrooms. Though why you'd want either is beyond me.";
+  return "Welcome to ASK DSU. I'm here to help you find teachers and empty classrooms. Though why you'd want either is beyond me.";
 };
