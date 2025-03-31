@@ -16,7 +16,7 @@ const Chat = () => {
 
   return (
     <div className="flex flex-col h-screen bg-background">
-      <header className="p-4 flex justify-between items-center border-b">
+      <header className="p-4 flex justify-between items-center border-b bg-background/80 backdrop-blur-sm z-10">
         <h1 className="text-xl font-semibold flex items-center gap-2">
           <Skull size={24} />
           ASK DSU

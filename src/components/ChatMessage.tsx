@@ -41,10 +41,10 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
     >
       <div
         className={cn(
-          "rounded-md p-3 max-w-[80%] border",
+          "rounded-md p-3 max-w-[80%] border backdrop-blur-sm",
           isBot 
-            ? "bg-chat-bot text-primary-foreground" 
-            : "bg-chat-user text-foreground"
+            ? "bg-chat-bot/90 text-primary-foreground" 
+            : "bg-chat-user/90 text-foreground"
         )}
       >
         <div className="flex items-start gap-2">

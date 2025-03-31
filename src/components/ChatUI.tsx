@@ -19,6 +19,22 @@ const ChatUI: React.FC = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [gradientPosition, setGradientPosition] = useState({ x: 0, y: 0 });
+
+  // Update gradient based on mouse position
+  const handleMouseMove = (e: MouseEvent) => {
+    const x = (e.clientX / window.innerWidth) * 100;
+    const y = (e.clientY / window.innerHeight) * 100;
+    setGradientPosition({ x, y });
+  };
+
+  // Setup mouse move listener
+  useEffect(() => {
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
 
   // Add welcome message on initial load
   useEffect(() => {
@@ -101,17 +117,26 @@ const ChatUI: React.FC = () => {
     return icons[Math.floor(Math.random() * icons.length)];
   };
 
+  // Dynamic gradient style
+  const gradientStyle = {
+    background: `radial-gradient(circle at ${gradientPosition.x}% ${gradientPosition.y}%, rgba(18, 16, 35, 0.9) 0%, rgba(10, 10, 18, 0.98) 70%)`,
+  };
+
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto bg-card rounded-md overflow-hidden border">
-      <div className="p-4 bg-primary text-primary-foreground flex items-center justify-between">
+    <div className="flex flex-col h-full max-w-4xl mx-auto bg-card rounded-md overflow-hidden border relative">
+      <div 
+        className="absolute inset-0 w-full h-full transition-all duration-300 ease-in-out -z-10" 
+        style={gradientStyle}
+      />
+      
+      <div className="p-4 bg-primary/80 backdrop-blur-sm text-primary-foreground flex items-center justify-between z-10">
         <h2 className="text-xl font-semibold flex items-center gap-2">
           {randomIcon()}
           ASK DSU
         </h2>
-        <div className="text-xs opacity-70">Where sarcasm meets knowledge</div>
       </div>
       
-      <div className="flex-grow overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-200px)]">
+      <div className="flex-grow overflow-y-auto p-4 space-y-4 max-h-[calc(100vh-200px)] z-10">
         {messages.map((message) => (
           <ChatMessage key={message.id} message={message} />
         ))}
@@ -131,7 +156,7 @@ const ChatUI: React.FC = () => {
       
       <Separator />
       
-      <form onSubmit={handleSendMessage} className="p-4 bg-card">
+      <form onSubmit={handleSendMessage} className="p-4 bg-card/30 backdrop-blur-sm z-10">
         <div className="flex space-x-2">
           <input
             ref={inputRef}
@@ -139,7 +164,7 @@ const ChatUI: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about teachers or free classrooms..."
-            className="flex-grow p-2 rounded-md border focus:outline-none focus:ring-1 focus:ring-primary"
+            className="flex-grow p-2 rounded-md border bg-background/80 focus:outline-none focus:ring-1 focus:ring-primary"
           />
           
           <Button 

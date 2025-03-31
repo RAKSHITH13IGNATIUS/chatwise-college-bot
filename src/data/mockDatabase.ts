@@ -1,4 +1,3 @@
-
 export interface Teacher {
   id: string;
   name: string;
@@ -28,7 +27,6 @@ export interface Schedule {
 
 // Mock teacher data
 export const teachers: Teacher[] = [
-   // Mock teacher data
   {
     id: "t1",
     name: "Dr. M Shahina Parveen",
@@ -180,55 +178,70 @@ export const getFreeClassrooms = (day: number, time: string): Classroom[] => {
 };
 
 // Improved teacher name matching with better accuracy
-export const findTeacherByName = (name: string): Teacher | null => {
+export const findTeacherByName = (name: string): (Teacher & {matchScore?: number}) | null => {
   if (!name || name.trim().length < 3) {
     return null; // Input is too short to be a valid teacher name
   }
   
   const normalizedSearch = name.toLowerCase().trim();
   
-  // 1. Try exact match first
+  // 1. Try exact match first (100% match)
   const exactMatch = teachers.find(
     teacher => teacher.name.toLowerCase() === normalizedSearch
   );
-  if (exactMatch) return exactMatch;
+  if (exactMatch) return {...exactMatch, matchScore: 1.0};
   
-  // 2. Try partial match with full name
+  // 2. Try partial match with full name (partial match)
   const partialMatch = teachers.find(
     teacher => teacher.name.toLowerCase().includes(normalizedSearch)
   );
-  if (partialMatch) return partialMatch;
+  if (partialMatch) {
+    const score = normalizedSearch.length / partialMatch.name.length;
+    if (score >= 0.7) return {...partialMatch, matchScore: score};
+  }
   
   // 3. Check for matches on individual name parts
   for (const teacher of teachers) {
-    const nameParts = teacher.name.toLowerCase().split(/\s+/);
+    const teacherNameLower = teacher.name.toLowerCase();
+    const nameParts = teacherNameLower.split(/\s+/);
     const searchParts = normalizedSearch.split(/\s+/);
     
     // Match any individual words in the name
-    if (searchParts.some(part => 
-      nameParts.some(namePart => 
-        namePart.includes(part) && part.length >= 3
-      )
-    )) {
-      return teacher;
+    let wordMatches = 0;
+    let totalWords = searchParts.length;
+    
+    for (const part of searchParts) {
+      if (part.length < 3) continue; // Skip very short search terms
+      
+      for (const namePart of nameParts) {
+        if (namePart.includes(part) || part.includes(namePart)) {
+          wordMatches++;
+          break;
+        }
+      }
+    }
+    
+    const wordMatchScore = totalWords > 0 ? wordMatches / totalWords : 0;
+    if (wordMatchScore >= 0.7) {
+      return {...teacher, matchScore: wordMatchScore};
     }
   }
   
   // 4. Advanced fuzzy matching - calculate similarity score
-  let bestMatch: Teacher | null = null;
+  let bestMatch: (Teacher & {matchScore: number}) | null = null;
   let bestScore = 0;
   
   for (const teacher of teachers) {
     const teacherName = teacher.name.toLowerCase();
     const score = calculateSimilarity(normalizedSearch, teacherName);
     
-    if (score > bestScore && score > 0.4) { // Minimum 40% similarity threshold
+    if (score > bestScore) {
       bestScore = score;
-      bestMatch = teacher;
+      bestMatch = {...teacher, matchScore: score};
     }
   }
   
-  return bestMatch;
+  return bestScore >= 0.7 ? bestMatch : null;
 };
 
 // Helper function to calculate string similarity (0-1 score)
@@ -240,22 +253,31 @@ function calculateSimilarity(s1: string, s2: string): number {
   if (s1.includes(s2)) return 0.9;
   if (s2.includes(s1)) return 0.9;
   
-  // Count matching characters
+  // Count matching characters (improved Levenshtein-inspired algorithm)
   let matches = 0;
-  const s1Chars = s1.split('');
-  const s2Copy = s2.slice();
+  let transpositions = 0;
   
-  for (const char of s1Chars) {
-    const index = s2Copy.indexOf(char);
-    if (index > -1) {
+  const s1Chars = s1.split('');
+  const s2Chars = s2.split('');
+  
+  // Find direct character matches
+  for (let i = 0; i < s1Chars.length; i++) {
+    if (i < s2Chars.length && s1Chars[i] === s2Chars[i]) {
       matches++;
-      // Remove the matched character to prevent double-counting
-      s2Copy.slice(index, 1);
     }
   }
   
-  // Calculate similarity score based on matching characters relative to average length
-  return (2.0 * matches) / (s1.length + s2.length);
+  // Count additional matching characters
+  const s1Set = new Set(s1Chars);
+  const s2Set = new Set(s2Chars);
+  const commonChars = [...s1Set].filter(char => s2Set.has(char)).length;
+  
+  // Final similarity calculation with normalized weights
+  const lengthFactor = 1 - Math.abs(s1.length - s2.length) / Math.max(s1.length, s2.length);
+  const directMatchFactor = s1.length > 0 ? matches / s1.length : 0;
+  const commonCharFactor = commonChars / Math.max(s1Set.size, s2Set.size);
+  
+  return (0.4 * lengthFactor + 0.4 * directMatchFactor + 0.2 * commonCharFactor);
 }
 
 // List of engineering jokes and taunts

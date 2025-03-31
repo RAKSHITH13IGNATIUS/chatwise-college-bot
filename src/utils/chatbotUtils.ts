@@ -187,15 +187,15 @@ export const generateResponse = (input: string): Promise<string> => {
         const potentialTeacherName = extractTeacherName(input);
         const teacher = findTeacherByName(potentialTeacherName);
         
-        if (teacher) {
+        if (teacher && teacher.matchScore && teacher.matchScore >= 0.7) {
           resolve(formatTeacherResponse(teacher));
         } else {
           const responses = [
-            `I couldn't find any teacher matching "${potentialTeacherName}". Maybe they quit because of students like you?`,
-            `No teacher found for "${potentialTeacherName}". They might be hiding from overeager students.`,
-            `"${potentialTeacherName}" doesn't seem to be a teacher here. Are you even at the right college?`,
-            `I don't know any "${potentialTeacherName}". Double-check the spelling, or just admit you made them up.`,
-            `"${potentialTeacherName}" isn't in my database. Maybe they left after reading your last assignment?`
+            `I couldn't find any teacher matching "${potentialTeacherName}". Please provide a more accurate name.`,
+            `No teacher found for "${potentialTeacherName}". Try using their full name or be more specific.`,
+            `"${potentialTeacherName}" doesn't seem to match any teacher in our database. Check the spelling or try using more of their name.`,
+            `I don't know any "${potentialTeacherName}". Double-check the spelling, or try including their full name or title.`,
+            `I need a more accurate name than "${potentialTeacherName}" to find the teacher you're looking for.`
           ];
           
           resolve(responses[Math.floor(Math.random() * responses.length)]);
@@ -218,5 +218,5 @@ export const getWelcomeMessage = (): string => {
   }
   
   // Default welcome if none stored
-  return "Welcome to ASK DSU. I'm here to help you find teachers and empty classrooms. Though why you'd want either is beyond me.";
+  return "Welcome to ASK DSU. I'm here to help you find teachers and empty classrooms.";
 };
