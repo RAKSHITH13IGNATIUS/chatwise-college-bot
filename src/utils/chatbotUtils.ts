@@ -33,7 +33,7 @@ const isTeacherQuery = (text: string): boolean => {
     'looking for',
     'professor',
     'prof',
-    'prof.',
+    'prof',
     'dr.',
     'dr',
     'teacher',
@@ -127,7 +127,7 @@ const formatFreeClassroomsResponse = (classrooms: any[]): string => {
 
 // Format the teacher information response
 const formatTeacherResponse = (teacher: any): string => {
-  let response = `I found ${teacher.name} for you! (though I'm not sure why anyone would want to)\n\n`;
+  let response = `I found ${teacher.name} for you! \n\n`;
   response += `📧 Email: ${teacher.email}\n`;
   response += `🏢 Cabin: ${teacher.cabin}\n`;
   response += `🏗️ Floor: ${teacher.floor}\n`;
